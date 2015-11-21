@@ -31,7 +31,7 @@
   "post-processors": [
     {
       "type": "atlas",
-      "artifact": "{{user `atlas_name`}}",
+      "artifact": "datacite/lagotto",
       "artifact_type": "amazon.ami",
       "token": "{{user `atlas_token`}}",
       "metadata": {
