@@ -51,11 +51,10 @@
     "region": "{{env `AWS_REGION`}}",
     "source_ami": "{{env `AWS_SOURCE_AMI`}}",
     "instance_type": "{{env `AWS_INSTANCE_TYPE`}}",
-    "atlas_token": "{{env `ATLAS_TOKEN`}}",
-    "atlas_name": "{{env `ATLAS_NAME`}}"
+    "atlas_token": "{{env `ATLAS_TOKEN`}}"
   },
    "push": {
-    "name": "{{user `atlas_name`}}",
+    "name": "datacite/lagotto",
     "vcs": true
   }
 }
