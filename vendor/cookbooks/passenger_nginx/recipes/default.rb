@@ -1,4 +1,8 @@
-include_recipe 'apt'
+# install and configure dependencies
+node.set['set_fqdn'] = ENV['HOSTNAME']
+include_recipe "hostnames::default"
+include_recipe "apt"
+include_recipe "nodejs"
 
 execute "apt-get update" do
   action :nothing
@@ -23,6 +27,10 @@ end
   end
 end
 
+if ENV['RSYSLOG_HOST']
+  node.override['nginx']['rsyslog_server']  = "#{ENV['RSYSLOG_HOST']}:#{ENV['RSYSLOG_PORT']}"
+end
+
 # nginx configuration
 template 'nginx.conf' do
   path   "#{node['nginx']['dir']}/nginx.conf"
@@ -30,6 +38,10 @@ template 'nginx.conf' do
   owner  'root'
   group  'root'
   mode   '0644'
+  cookbook 'passenger_nginx'
+  variables(
+    :rsyslog_server => node['nginx']['rsyslog_server']
+  )
   notifies :reload, 'service[nginx]'
 end
 

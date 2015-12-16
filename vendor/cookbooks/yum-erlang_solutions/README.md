@@ -1,5 +1,7 @@
 yum-erlang_solutions Cookbook
 ============
+[![Build Status](https://travis-ci.org/chef-cookbooks/yum-erlang_solutions.svg?branch=master)](http://travis-ci.org/chef-cookbooks/yum-erlang_solutions)
+[![Cookbook Version](https://img.shields.io/cookbook/v/yum-erlang_solutions.svg)](https://supermarket.chef.io/cookbooks/yum-erlang_solutions)
 
 The yum-erlang_solutions cookbook takes over management of the default
 repositoryids used by erlang_solutions. It allows attribute manipulation of
@@ -7,8 +9,16 @@ repositoryids used by erlang_solutions. It allows attribute manipulation of
 
 Requirements
 ------------
-* Chef 11 or higher
-* yum cookbook version 3.0.0 or higher
+#### Platforms
+* RHEL/CentOS and derivatives
+* Fedora
+
+#### Chef
+* Chef 11+
+
+#### Cookbooks
+* yum version 3.2.0 or higher
+
 
 Attributes
 ----------
@@ -75,11 +85,11 @@ include_recipe 'yum-erlang_solutions'
 
 License & Authors
 -----------------
-- Author:: Sean OMeara (<someara@opscode.com>)
 
-```text
-Copyright:: 2011-2013 Opscode, Inc.
+**Author:** Cookbook Engineering Team (<cookbooks@chef.io>)
 
+**Copyright:** 2011-2015, Chef Software, Inc.
+```
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at

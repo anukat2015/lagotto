@@ -31,6 +31,10 @@ module Poise
         # is used to show the value of @subresources during Chef's error formatting.
         # @api private
         class NoPrintingResourceCollection < Chef::ResourceCollection
+          def inspect
+            to_text
+          end
+
           def to_text
             "[#{all_resources.map(&:to_s).join(', ')}]"
           end
@@ -80,11 +84,23 @@ module Poise
             end
             @run_context.resource_collection.insert(order_fixer)
             @subcontexts.each do |ctx|
+              # Copy all resources to the outer context.
               ctx.resource_collection.each do |r|
                 Chef::Log.debug("   * #{r}")
                 # Fix the subresource to use the outer run context.
                 r.run_context = @run_context
                 @run_context.resource_collection.insert(r)
+              end
+              # Copy all notifications to the outer context.
+              %w{immediate delayed}.each do |notification_type|
+                ctx.send(:"#{notification_type}_notification_collection").each do |key, notifications|
+                  notifications.each do |notification|
+                    parent_notifications = @run_context.send(:"#{notification_type}_notification_collection")[key]
+                    unless parent_notifications.any? { |existing_notification| existing_notification.duplicates?(notification) }
+                      parent_notifications << notification
+                    end
+                  end
+                end
               end
             end
             Chef::Log.debug("Collection: #{@run_context.resource_collection.map(&:to_s).join(', ')}")
@@ -140,11 +156,19 @@ module Poise
           resource.first
         end
 
+        # Register a resource as part of this container. Returns true if the
+        # resource was added to the collection and false if it was already
+        # known.
+        #
+        # @note Return value added in 2.4.0.
+        # @return [Boolean]
         def register_subresource(resource)
           subresources.lookup(resource)
+          false
         rescue Chef::Exceptions::ResourceNotFound
           Chef::Log.debug("[#{self}] Adding #{resource} to subresources")
           subresources.insert(resource)
+          true
         end
 
         private
@@ -193,6 +217,7 @@ module Poise
             super
             klass.extend(ClassMethods)
             klass.const_get(:HIDDEN_IVARS) << :@subcontexts
+            klass.const_get(:FORBIDDEN_IVARS) << :@subcontexts
           end
         end
 

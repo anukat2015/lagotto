@@ -138,51 +138,53 @@ def install_gem
   end
 end
 
+
 def read_token(repo_url, gems=false)
   return repo_url unless new_resource.master_token
 
-  if node['fqdn'].nil?
-    Chef::Log.fatal("This node's fqdn is set to nil, so a read token cannot be issued!" \
-                    "Please change your fqdn settings.")
-  end
+  base_url = new_resource.base_url
 
-  if node['packagecloud'][new_resource.repository].nil? ||
-     node['packagecloud']['hostname'] != node['fqdn']
+  base_repo_url = ::File.join(base_url, node['packagecloud']['base_repo_path'])
 
-    base_url = new_resource.base_url
+  uri = construct_uri_with_options({base_url: base_repo_url, repo: new_resource.repository, endpoint: 'tokens.text'})
+  uri.user     = new_resource.master_token
+  uri.password = ''
 
-    base_repo_url = ::File.join(base_url, node['packagecloud']['base_repo_path'])
+  resp = post(uri, install_endpoint_params)
 
-    uri = construct_uri_with_options({base_url: base_repo_url, repo: new_resource.repository, endpoint: 'tokens.text'})
-    uri.user     = new_resource.master_token
-    uri.password = ''
-
-    resp = post(uri, install_endpoint_params)
-
-    Chef::Log.debug("#{new_resource.name} TOKEN = #{resp.body.chomp}")
-
-    node.set['packagecloud']['hostname'] = node['fqdn']
-    node.set['packagecloud'][new_resource.repository] = Mash.new(read_token:  resp.body.chomp)
-  end
+  Chef::Log.debug("#{new_resource.name} TOKEN = #{resp.body.chomp}")
 
   if is_rhel5? && !gems
     repo_url
   else
-    repo_url.user     = node['packagecloud'][new_resource.repository]['read_token']
+    repo_url.user     = resp.body.chomp
     repo_url.password = ''
     repo_url
   end
 end
 
 def install_endpoint_params
-  dist = value_for_platform_family(
+  dist = new_resource.force_dist || value_for_platform_family(
     'debian' => node['lsb']['codename'],
     ['rhel', 'fedora'] => node['platform_version'],
   )
 
-  { :os   => node['platform'],
+  hostname = node['packagecloud']['hostname_override'] ||
+             node['fqdn'] ||
+             node['hostname']
+
+  if !hostname
+    raise("Can't determine hostname!  Set node['packagecloud']['hostname_override'] " \
+          "if it cannot be automatically determined by Ohai.")
+  end
+
+  { :os   => os_platform,
     :dist => dist,
-    :name => node['fqdn'] }
+    :name => hostname }
+end
+
+def os_platform
+  new_resource.force_os || node['platform']
 end
 
 def filename
@@ -210,5 +212,5 @@ def construct_uri_with_options(options)
 end
 
 def append_trailing_slash(str)
-  str.end_with?("/") ? str : str << "/"
+  str.end_with?("/") ? str : str + "/"
 end

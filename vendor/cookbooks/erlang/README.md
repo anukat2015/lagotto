@@ -1,31 +1,28 @@
-Description
-===========
+erlang Cookbook
+===============
+
+[![Build Status](https://travis-ci.org/chef-cookbooks/erlang.svg?branch=master)](https://travis-ci.org/chef-cookbooks/erlang)
+[![Cookbook Version](https://img.shields.io/cookbook/v/erlang.svg)](https://supermarket.chef.io/cookbooks/erlang)
 
 Manages installation of Erlang via packages or source.
 
 Requirements
-============
+------------
+#### Platforms
+- Debian/Ubuntu
+- RHEL/CentOS/Scientific/Amazon/Oracle
 
-## Chef
+#### Chef
+- Chef 11+
 
-Chef version 0.10.10+ and Ohai 0.6.12+ are required
-
-## Platform
-
-Tested on:
-
-* Ubuntu 10.04, 11.10, 12.04, 14.04
-* Red Hat Enterprise Linux (CentOS/Amazon/Scientific/Oracle) 5.11, 6.6
-
-**Notes**: This cookbook has been tested on the listed platforms. It may work on other platforms with or without modification.
-
-## Cookbooks
-
-* yum (for epel recipe)
+#### Cookbooks
+* yum
+* yum-epel
+* yum-erlang_solutions
 * build-essential (for source compilation)
 
 Attributes
-==========
+----------
 
 * `node['erlang']['gui_tools']` - whether to install the GUI tools for
   Erlang.
@@ -45,36 +42,36 @@ Attributes
   (e.g., maverick vs precise).
 
 Recipes
-=======
+-------
 
-## default
+### default
 
 Manages installation of Erlang. Includes the package or source recipe
 depending on the value of `node['erlang']['install_method']`.
 
-## package
+### package
 
 Installs Erlang from distribution packages.
 
-## source
+### source
 
 Installs Erlang from source.
 
-## erlang_solutions
+### esl
 
 Adds Erlang Solutions' [package repositories][] on Debian, CentOS (>5), and Fedora systems, and installs the `esl-erlang` package.
 
 [package repositories]:https://www.erlang-solutions.com/downloads/download-erlang-otp
 
-License and Author
-==================
+License & Authors
+-----------------
 
 * Author: Joe Williams (<joe@joetify.com>)
 * Author: Joshua Timberman (<joshua@chef.io>)
 * Author: Matt Ray (<matt@chef.io>)
 * Author: Hector Castro (<hector@basho.com>)
 * Author: Christopher Maier (<cm@chef.io>)
-
+```text
 Copyright 2011-2015, Chef Software, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -88,3 +85,4 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
+```
