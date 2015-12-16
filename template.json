@@ -65,7 +65,7 @@
     "source_ami": "{{env `AWS_SOURCE_AMI`}}",
     "instance_type": "{{env `AWS_INSTANCE_TYPE`}}",
     "atlas_token": "{{env `ATLAS_TOKEN`}}",
-    "artifact_name": "{{env `ARTIFACT`}}"
+    "artifact_name": "{{env `ARTIFACT_NAME`}}"
   },
   "push": {
     "name": "{{user `artifact_name`}}",
