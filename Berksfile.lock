@@ -9,7 +9,7 @@ DEPENDENCIES
     revision: 0343aaa39aaed6a91b05211cd3a2ae9da95e89ba
   lagotto
     git: git@github.com:lagotto/lagotto-cookbook.git
-    revision: f0e78b65c9e215405f135e95283ff0bab0997f11
+    revision: 1794b12b71445031822ee0c9a390e807cbe47610
   memcached
   mysql
     git: git@github.com:lagotto/mysql.git
@@ -86,7 +86,7 @@ GRAPH
   hostnames (0.3.6)
     hostsfile (>= 0.0.0)
   hostsfile (2.4.5)
-  lagotto (5.0.2)
+  lagotto (5.0.3)
     apt (>= 0.0.0)
     capistrano (~> 1.0.0)
     consul (>= 0.0.0)
