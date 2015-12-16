@@ -73,6 +73,7 @@
     "exclude": [
       "frontend/bower_components/*",
       "frontend/node_modules/*",
+      "frontend/tmp/*",
       "vendor/bundle/*",
       ".DS_Store",
       ".git/*",
