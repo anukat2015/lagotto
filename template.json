@@ -67,7 +67,8 @@
     "subnet_id": "{{env `AWS_SUBNET_ID`}}",
     "security_group_id": "{{env `AWS_SECURITY_GROUP_ID`}}",
     "instance_type": "{{env `AWS_INSTANCE_TYPE`}}",
-    "atlas_token": "{{env `ATLAS_TOKEN`}}"
+    "atlas_token": "{{env `ATLAS_TOKEN`}}",
+    "artifact_name": "{{env `ARTIFACT_NAME`}}"
   },
   "push": {
     "name": "{{user `artifact_name`}}",
