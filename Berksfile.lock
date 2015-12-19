@@ -9,7 +9,7 @@ DEPENDENCIES
     revision: 0343aaa39aaed6a91b05211cd3a2ae9da95e89ba
   lagotto
     git: git@github.com:lagotto/lagotto-cookbook.git
-    revision: 1794b12b71445031822ee0c9a390e807cbe47610
+    revision: 77bfe7bc174d4f52dea8def9e76d65d11d1e2b80
   memcached
   mysql
     git: git@github.com:lagotto/mysql.git
@@ -20,7 +20,7 @@ DEPENDENCIES
   nodejs
   passenger_nginx
     git: git@github.com:lagotto/passenger_nginx-cookbook.git
-    revision: 6edd8e3b2a428afe806a05a631f6454e4022d4e9
+    revision: faea6fe7344cd68273e1f5ef1970e68c47f2c965
   phantomjs
   postfix
   redisio
@@ -51,7 +51,7 @@ GRAPH
   chef_handler (1.2.0)
   chocolatey (0.6.1)
     windows (~> 1.38)
-  compat_resource (12.5.24)
+  compat_resource (12.5.26)
   consul (1.3.1)
     chef-vault (~> 1.3)
     chocolatey (>= 0.0.0)
@@ -86,7 +86,7 @@ GRAPH
   hostnames (0.3.6)
     hostsfile (>= 0.0.0)
   hostsfile (2.4.5)
-  lagotto (5.0.3)
+  lagotto (5.0.4)
     apt (>= 0.0.0)
     capistrano (~> 1.0.0)
     consul (>= 0.0.0)
@@ -124,7 +124,7 @@ GRAPH
   openssl (4.4.0)
     chef-sugar (>= 3.1.1)
   packagecloud (0.1.1)
-  passenger_nginx (1.0.10)
+  passenger_nginx (1.0.12)
     apt (>= 0.0.0)
     hostnames (>= 0.0.0)
     nodejs (>= 0.0.0)
@@ -148,7 +148,7 @@ GRAPH
   ruby (0.7.6)
     apt (>= 0.0.0)
     build-essential (>= 0.0.0)
-  runit (1.7.4)
+  runit (1.7.6)
     packagecloud (>= 0.0.0)
   selinux (0.9.0)
   ulimit (0.3.3)
