@@ -127,8 +127,4 @@ Vagrant.configure("2") do |config|
     machine.vm.network :public_network
     machine.vm.synced_folder ".", "/var/www/#{ENV['APPLICATION']}/shared", id: "vagrant-root"
   end
-
-  config.push.define "capistrano" do |push|
-    push.stage = ENV["STAGE"]
-  end
 end
