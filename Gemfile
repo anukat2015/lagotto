@@ -5,7 +5,7 @@ gem 'mysql2', '0.3.18'
 gem 'ar-octopus', '~> 0.8.5', :require => 'octopus', :git => 'https://github.com/tchandy/octopus.git'
 
 gem "dotenv", '~> 1.0.2'
-gem 'sidekiq', '~> 3.3.0'
+gem 'sidekiq', '~> 4.0', '>= 4.0.1'
 gem 'sinatra'
 gem 'rake', '~> 10.4.2'
 gem "whenever", "~> 0.9.0", require: false
@@ -30,6 +30,7 @@ gem "oj", "~> 2.10.4"
 gem 'safe_yaml', '~> 1.0.4'
 gem 'hashie', '~> 3.3.2'
 gem 'rubyzip',  "~> 1.1", :require => 'zip'
+gem 'colorize', '~> 0.7.7'
 
 gem "devise", "~> 3.4.1"
 gem "omniauth-persona"
