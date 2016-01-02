@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 describe DataoneUsage, type: :model, vcr: true do
+  before(:each) { allow(Time.zone).to receive(:now).and_return(Time.mktime(2015, 4, 8)) }
 
   subject { FactoryGirl.create(:dataone_usage) }
 
