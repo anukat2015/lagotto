@@ -32,7 +32,7 @@ class AlertsController < ApplicationController
 
     collection = collection.query(params[:q]) if params[:q]
 
-    @alerts = collection.paginate(:page => params[:page])
+    @alerts = collection.paginate(page: (params[:page] || 1).to_i)
   end
 
   def create
@@ -85,7 +85,7 @@ class AlertsController < ApplicationController
     end
     collection = collection.query(params[:q]) if params[:q]
 
-    @alerts = collection.paginate(:page => params[:page])
+    @alerts = collection.paginate(page: (params[:page] || 1).to_i)
 
     if params[:work_id]
       render :alert
