@@ -54,8 +54,8 @@ class Api::V6::ReferencesController < Api::BaseController
     end
 
     per_page = params[:per_page] && (0..1000).include?(params[:per_page].to_i) ? params[:per_page].to_i : 1000
-
-    collection = collection.paginate(per_page: per_page, page: params[:page])
+    page = params[:page] && params[:page].to_i > 0 ? params[:page].to_i : 1
+    collection = collection.paginate(per_page: per_page, page: page)
 
     @reference_relations = collection.decorate
   end

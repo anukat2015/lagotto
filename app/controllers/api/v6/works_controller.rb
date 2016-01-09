@@ -79,10 +79,11 @@ class Api::V6::WorksController < Api::BaseController
     collection = get_sort(collection, params, source)
 
     per_page = params[:per_page] && (0..1000).include?(params[:per_page].to_i) ? params[:per_page].to_i : 1000
+    page = params[:page] && params[:page].to_i > 0 ? params[:page].to_i : 1
     total_entries = get_total_entries(params, source, publisher)
 
     collection = collection.paginate(per_page: per_page,
-                                     page: params[:page],
+                                     page: page,
                                      total_entries: total_entries)
 
     @works = collection.decorate(context: { role: is_admin_or_staff? })

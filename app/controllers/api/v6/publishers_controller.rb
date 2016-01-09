@@ -20,7 +20,8 @@ class Api::V6::PublishersController < Api::BaseController
   end
 
   def index
-    collection = Publisher.order(:name).paginate(:page => params[:page]).all
+    page = params[:page] && params[:page].to_i > 0 ? params[:page].to_i : 1
+    collection = Publisher.order(:name).paginate(page: page).all
     @publishers = collection.decorate
   end
 
