@@ -91,7 +91,7 @@ ENV['SERVERS'].split(",").each_with_index do |s, i|
 end
 
 namespace :deploy do
-  before :starting, "sidekiq:quiet"
+  #before :starting, "sidekiq:quiet"
 
   desc 'Restart application'
   task :restart do
