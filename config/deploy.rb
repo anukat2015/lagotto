@@ -91,7 +91,9 @@ ENV['SERVERS'].split(",").each_with_index do |s, i|
 end
 
 namespace :deploy do
-  before :starting, "sidekiq:quiet"
+  if ENV['SIDEKIQ_ENABLE'] == '1'
+    before :starting, "sidekiq:quiet"
+  end
 
   desc 'Restart application'
   task :restart do
