@@ -1,4 +1,4 @@
-2016-02-02
+2016-02-03
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 alm-101.soma.plos.org
 
@@ -47,6 +47,7 @@ PORTS
 
     127.0.0.1:46267  Passenger RubyApp: /var/www/lagotto/current/public (production)
     127.0.0.1:58511  Passenger RubyApp: /var/www/alm-report/current/public (production)
+    10.5.3.55:11211  memcached
     10.5.3.55:80     nginx (lagotto)
     10.5.3.62:80     nginx (alm-report)
 
