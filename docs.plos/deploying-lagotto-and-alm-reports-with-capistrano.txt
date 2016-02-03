@@ -1,0 +1,298 @@
+2016-02-02
+
+QUICK START
+-----------
+Make sure you have completed the SETUP steps below, and that Nginx is running
+on the target.
+
+    *** NOTE: ALM SOMA .env files are in LastPass (https://lastpass.com) ***
+
+Deploying LAGOTTO:
+
+    1. git clone https://github.com/PLOS/lagotto.git
+
+    2. Define .env file for target server. Define SIDEKIQ_ENABLED=1 if you
+       want Sikekiq started.
+
+    3. Copy server .env file into root of local lagotto repo.
+
+    4. Copy same .env file to target server : /var/www/lagotto/shared/
+
+    5. From root of local repo, deploy Lagotto to target using Capistrano.
+
+    LOG_LEVEL=debug BRANCH_NAME=plos-prod-fixes bundle exec cap production deploy
+
+
+Deploying ALM-REPORT:
+
+    1. git clone https://github.com/PLOS/alm-report-1.git
+
+    2. Define .env file for target server.
+
+    3. Copy server .env file into root of local alm-report repo.
+
+    4. Copy same .env file to target server : /var/www/alm-report/shared/
+
+    5. From root of local repo, deploy ALM Reports to target using Capistrano.
+
+    LOG_LEVEL=debug BRANCH_NAME=plos-prod-fixes bundle exec cap production deploy
+
+
+CAPISTRANO: TARGET (MACHINE DEPLOYING TO)
+-----------------------------------------
+target=alm-101.soma.plos.org
+
+    // Setup capistrano user (ex: alm)
+
+        sudo su
+        groupadd alm
+
+        useradd alm -g alm
+        passwd alm
+
+    // Add user to group with "sudo" access
+
+        sudo usermod -a -G plosops alm
+
+    // Change default shell to bash
+
+        sudo chsh -s /bin/bash alm
+
+    // Create directories for applications to deploy; make alm user the owner.
+
+        cd /var/www
+
+        sudo mkdir alm-report
+        sudo chown -R alm:alm alm-report
+        cd alm-report
+        mkdir -p shared/config
+
+        sudo mkdir lagotto
+        sudo chown -R alm:alm lagotto
+        cd lagotto
+        mkdir -p shared/config
+
+    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    UBUNTU (assumption: 14.04(trusty); "lsb_release -a")
+
+        sudo apt-get install build-essential
+        sudo apt-get install libssl-dev
+        sudo apt-get install libsqlite3-dev
+
+    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    NGINX + PASSENGER(Ruby App Server)
+
+    1. Install Passenger Packages
+
+        # Install Phusion's PGP key and add HTTPS support for APT
+        sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 561F9B9CAC40B2F7
+        sudo apt-get install -y apt-transport-https ca-certificates
+
+        # Add Phusion APT repository
+        sudo sh -c 'echo deb https://oss-binaries.phusionpassenger.com/apt/passenger trusty main > /etc/apt/sources.list.d/passenger.list'
+        sudo apt-get update
+
+        # Install Passenger + Nginx
+        sudo apt-get install -y nginx-extras passenger
+
+    2. Enable the Passenger Nginx Module
+
+        // what's passenger root?
+
+        $ passenger-config --root
+            /usr/lib/ruby/vendor_ruby/phusion_passenger/locations.ini
+
+        // define passenger vars in nginx.conf
+
+        cd /etc/nginx
+        vim nginx.conf
+
+        http {
+            passenger_root /usr/lib/ruby/vendor_ruby/phusion_passenger/locations.ini;
+            passenger_ruby /usr/bin/ruby;
+            passenger_app_env production;
+            ...
+
+    3. Create configurations for ALM-Reports and Lagotto
+
+        cd /etc/nginx/sites-available
+        sudo vim alm-report.conf
+
+            server {
+                listen 10.5.3.61:80 default;
+
+                # IMPORTANT: This is the hostname that alm will be served on.
+                # Even if DNS points other hostnames at this IP, Nginx will
+                # only serve alm on hosts listed here.  To list multiple urls,
+                # separate them with spaces
+                server_name almreports.plos.org;
+
+                # This is the root for static hosting
+                root /var/www/alm-report/current/public;
+                access_log /var/log/nginx/alm-report.access.log;
+
+                location / {
+                    passenger_enabled on;
+                }
+            }
+
+        sudo vim lagotto.conf
+
+            server {
+                listen 10.5.3.54:80 default;
+
+                # IMPORTANT: This is the hostname that alm will be served on.
+                # Even if DNS points other hostnames at this IP, Nginx will
+                # only serve alm on hosts listed here.  To list multiple urls,
+                # separate them with spaces
+                server_name lagotto.plos.org;
+
+                # This is the root for static hosting
+                root /var/www/lagotto/current/public;
+                access_log /var/log/nginx/lagotto.access.log;
+
+                location / {
+                    passenger_enabled on;
+                }
+            }
+
+    4. Enable Lagotto and ALM-Reports sites
+
+        cd /etc/nginx/sites-enabled
+        sudo rm default
+
+        sudo ln -s /etc/nginx/sites-available/alm-report.conf \
+            /etc/nginx/sites-enabled/alm-report.conf
+
+        sudo ln -s /etc/nginx/sites-available/lagotto.conf \
+            /etc/nginx/sites-enabled/lagotto.conf
+
+    5. Restart Nginx
+
+        sudo service nginx restart
+
+    6: Check Installation
+
+        sudo passenger-config validate-install
+
+            x Passenger itself
+            * Checking whether this Passenger install is in PATH... ✓
+            * Checking whether there are no other Passenger installations... ✓
+            Everything looks good. :-)
+
+
+    // reference: installing passenger+nginx on ubuntu 14.04 lts
+    https://www.phusionpassenger.com/library/install/nginx/install/oss/trusty/
+
+    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    NODEJS (user:alm, node.js:v0.12.x)
+
+        curl https://raw.githubusercontent.com/creationix/nvm/v0.30.2/install.sh | sh
+        // script will insert lines into alm's .bashrc to load nvm @ login.
+        // logout and back in to load nvm
+
+        // get list of versions to install. install latest.
+        nvm ls-remote
+        nvm install 0.12.9
+        nvm alias default 0.12.9
+
+        // verify versions of node and npm 
+        $ node --version
+            v0.12.9
+        $ npm --version
+            2.14.9
+
+    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    RUBY 2.0.0
+
+        NOTE: there is a problem running Lagotto under 2.3.x[1], so we rolled
+back
+              to the version of Ruby running in RWC Production (2.0.0p353)
+
+
+    // install chruby ( https://github.com/postmodern/chruby#install )
+
+        wget -O chruby-0.3.9.tar.gz https://github.com/postmodern/chruby/archive/v0.3.9.tar.gz
+        tar -xzvf chruby-0.3.9.tar.gz
+        cd chruby-0.3.9/
+        sudo make install
+
+    // install ruby-install
+
+        wget -O ruby-install-0.5.0.tar.gz https://github.com/postmodern/ruby-install/archive/v0.5.0.tar.gz
+        tar -xzvf ruby-install-0.5.0.tar.gz
+        cd ruby-install-0.5.0/
+        sudo make install
+
+    // install ruby 2.0
+
+        sudo ruby-install ruby 2.0
+
+    // interactive login reads .bash_profile while Capistrano (remote login) reads .bashrc.
+    // edit or create the .bashrc with just the lines below (ie, delete other lines if exists).
+
+        file: ~/.bashrc
+
+            source /usr/share/chruby/chruby.sh
+            source /usr/share/chruby/auto.sh
+            chruby 2.0.0
+:OR
+            source /usr/local/share/chruby/chruby.sh
+            source /usr/local/share/chruby/auto.sh
+            chruby 2.0.0
+
+            export NVM_DIR="/var/www/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
+
+        file: ~/.bash_profile
+
+            if [ -f ~/.bashrc ]; then
+                source ~/.bashrc
+            fi
+
+    // install bundler
+
+        gem install bundle
+
+    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    *NOTE*: Ruby 2.3 had already been setup on machine, so we had to update
+            the sym link to ruby in /usr/bin.
+
+        // nginx conf files point to this executable (ex: lagotto.conf)
+
+        cd /usr/bin
+        ls
+            lrwxrwxrwx  ruby -> /opt/rubies/ruby-2.3.0/bin/ruby
+
+        sudo rm ruby
+        sudo ln -s /opt/rubies/ruby-2.0.0-p576/bin/ruby /usr/bin/ruby
+
+    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    REDIS?
+        sudo apt-get install redis-server (2.8.4)
+
+    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    SIDEKIQ
+        // sidekiq should be started with Capistrano deployment, however,
+        // here is how to manually start (TODO:verify and document)
+
+        RAILS_ENV=production bundle exec rake sidekiq:start
+        bundle exec sidekiq -d -L log/sidekiq.log -C config/sidekiq.yml -e production
+
+    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    DNS HACK FOR CAS (register.plos.org)
+
+        CAS talks to both browser and CAS-APP, so resolution needs to be defined 
+        on both machines.
+
+        Target Server (CAS-app, such as, ALM-Reports):
+
+            /etc/hosts
+                10.5.3.58       register.plos.org
+
+        Client Machine (Running browser)
+
+TESTING
+-------
+    http://alm.plos.org/api/v5/articles?ids=10.1371/journal.pone.0119210
+    http://10.5.3.54/api/v5/articles?ids=10.1371/journal.pone.0119210

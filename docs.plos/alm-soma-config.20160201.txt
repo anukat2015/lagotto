@@ -1,0 +1,75 @@
+2016-02-02
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+alm-101.soma.plos.org
+
+PORTS
+    $ sudo netstat -plnt
+
+    127.0.0.1:60022  Passenger RubyApp: /var/www/lagotto/current/public (production)
+    127.0.0.1:55020  Passenger RubyApp: /var/www/alm-report/current/public (production)
+    10.5.3.54:11211  memcached
+    10.5.3.54:80     nginx (lagotto)
+    10.5.3.61:80     nginx (alm-report)
+
+PROCESSES
+
+    root      12170      1  nginx: master process /usr/sbin/nginx
+    www-data  12171  12170  nginx: worker process
+    www-data  12172  12170  nginx: worker process
+    www-data  12173  12170  nginx: worker process
+    www-data  12174  12170  nginx: worker process
+
+    root      12136      1  Passenger watchdog
+    root      12139  12136  Passenger core
+    nobody    12148  12136  Passenger ust-router
+    alm       35264      1  Passenger RubyApp: /var/www/alm-report/current/public (production)
+    alm       12492      1  Passenger RubyApp: /var/www/lagotto/current/public (production)
+    alm       38093      1  Passenger RubyApp: /var/www/lagotto/current/public (production)
+    alm       38193      1  Passenger RubyApp: /var/www/lagotto/current/public (production)
+
+    memcache  7711       1  /usr/bin/memcached -m 1024 -p 11211 -u memcache -l 10.5.3.54
+
+    alm        9925      1  sidekiq 3.3.4 lagotto [50 of 50 busy]
+
+FILES
+    Environment: /var/www/lagotto/shared/.env, /var/www/alm-report/shared/.env
+
+    Logs: /var/www/lagotto/shared/log/*, /var/www/alm-report/shared/log/*
+
+CRONTAB
+    alm $ crontab -l
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+alm-102.soma.plos.org
+
+PORTS
+    $ sudo netstat -plnt
+
+    127.0.0.1:46267  Passenger RubyApp: /var/www/lagotto/current/public (production)
+    127.0.0.1:58511  Passenger RubyApp: /var/www/alm-report/current/public (production)
+    10.5.3.55:80     nginx (lagotto)
+    10.5.3.62:80     nginx (alm-report)
+
+PROCESSES
+
+    root     123492      1  00:00:00 nginx: master process /usr/sbin/nginx
+    www-data 123493 123492  00:00:00 nginx: worker process
+    www-data 123494 123492  00:00:00 nginx: worker process
+    www-data 123495 123492  00:00:00 nginx: worker process
+    www-data 123496 123492  00:00:00 nginx: worker process
+
+    root     123458      1  00:00:00 Passenger watchdog
+    root     123461 123458  00:00:03 Passenger core
+    nobody   123470 123458  00:00:00 Passenger ust-router
+    alm       32561      1  00:00:10 Passenger RubyApp: /var/www/alm-report/current/public (production)
+    alm        4563      1  00:00:08 Passenger RubyApp: /var/www/lagotto/current/public (production)
+
+FILES
+    Environment: /var/www/lagotto/shared/.env, /var/www/alm-report/shared/.env
+
+    Logs: /var/www/lagotto/shared/log/*, /var/www/alm-report/shared/log/*
+
+CRONTAB
+    alm $ crontab -l
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
