@@ -1,24 +1,33 @@
 SITE
   remote: http://community.opscode.com/api/v1
   specs:
-    7-zip (1.0.2)
-      windows (>= 1.2.2)
-    apt (2.7.0)
-    ark (0.9.0)
-      7-zip (>= 0.0.0)
+    apt (3.0.0)
+    ark (1.0.1)
+      build-essential (>= 0.0.0)
+      seven_zip (>= 0.0.0)
       windows (>= 0.0.0)
-    aws (2.7.2)
-    build-essential (2.2.3)
-    chef-sugar (3.1.1)
-    chef_handler (1.2.0)
-    chocolatey (0.4.0)
-      windows (~> 1.31)
-    consul (0.10.1)
-      golang (~> 1.4)
-      libarchive (~> 0.4.0)
-      packagecloud (>= 0.0.0)
-      runit (>= 0.0.0)
-      yum-repoforge (>= 0.0.0)
+    aws (3.3.2)
+      ohai (>= 2.1.0)
+    build-essential (3.2.0)
+      seven_zip (>= 0.0.0)
+    chef-solo-search (0.5.1)
+    chef-sugar (3.3.0)
+    chef-vault (1.3.3)
+    chef_handler (1.3.0)
+    chocolatey (1.0.0)
+      windows (~> 1.38)
+    compat_resource (12.9.1)
+    consul (2.1.0)
+      build-essential (>= 0.0.0)
+      chef-sugar (>= 0.0.0)
+      chef-vault (~> 1.3)
+      firewall (~> 2.0)
+      golang (>= 0.0.0)
+      nssm (>= 0.0.0)
+      poise (~> 2.2)
+      poise-service (~> 1.0)
+      rubyzip (~> 1.0)
+      yum-epel (>= 0.0.0)
     couchdb (2.5.2)
       erlang (>= 0.0.0)
       yum (~> 3.0)
@@ -29,98 +38,110 @@ SITE
       mysql-chef_gem (~> 0.0)
       postgresql (>= 1.0.0)
       xfs (>= 0.0.0)
-    erlang (1.5.8)
+    erlang (2.1.1)
       apt (>= 1.7.0)
       build-essential (>= 0.0.0)
       yum (~> 3.0)
       yum-epel (>= 0.0.0)
       yum-erlang_solutions (>= 0.0.0)
-    golang (1.5.1)
-    homebrew (1.13.0)
+    firewall (2.5.0)
+      chef-sugar (>= 0.0.0)
+    golang (1.7.0)
+    homebrew (2.1.0)
       build-essential (>= 2.1.2)
-    libarchive (0.4.4)
-      apt (~> 2.5)
-      build-essential (~> 2.0)
-    memcached (1.7.2)
+    hostnames (0.3.6)
+      hostsfile (>= 0.0.0)
+    hostsfile (2.4.5)
+    memcached (2.1.0)
+      compat_resource (>= 12.9.0)
       runit (~> 1.0)
-      yum (~> 3.0)
       yum-epel (>= 0.0.0)
     mysql-chef_gem (0.0.5)
       build-essential (>= 0.0.0)
       mysql (>= 0.0.0)
-    nodejs (2.4.0)
+    nodejs (2.4.4)
       apt (>= 0.0.0)
       ark (>= 0.0.0)
       build-essential (>= 0.0.0)
       homebrew (>= 0.0.0)
       yum-epel (>= 0.0.0)
-    openssl (4.0.0)
-      chef-sugar (>= 0.0.0)
-    packagecloud (0.0.19)
+    nssm (1.2.1)
+      windows (~> 1.0)
+    ohai (3.0.1)
+    openssl (4.4.0)
+      chef-sugar (>= 3.1.1)
+    packagecloud (0.2.0)
     phantomjs (1.0.3)
       build-essential (>= 0.0.0)
       chocolatey (>= 0.0.0)
-    postfix (3.7.0)
-    postgresql (3.4.20)
+    poise (2.7.0)
+    poise-service (1.2.1)
+      poise (~> 2.0)
+    postfix (3.8.0)
+    postgresql (4.0.6)
       apt (>= 1.9.0)
       build-essential (>= 0.0.0)
-      openssl (~> 4.0.0)
-    redisio (2.3.0)
+      openssl (~> 4.0)
+    redisio (2.4.2)
       build-essential (>= 0.0.0)
       ulimit (>= 0.1.2)
-    runit (1.7.2)
+    rsyslog (4.0.0)
+      compat_resource (>= 0.0.0)
+    rubyzip (1.3.1)
+      poise (~> 2.2)
+    runit (1.7.6)
       packagecloud (>= 0.0.0)
+    seven_zip (2.0.0)
+      windows (>= 1.2.2)
     ulimit (0.3.3)
-    windows (1.37.0)
+    windows (1.40.0)
       chef_handler (>= 0.0.0)
-    xfs (1.1.0)
-    yum (3.6.3)
-    yum-epel (0.6.2)
-      yum (~> 3.2)
-    yum-erlang_solutions (0.2.0)
-      yum (~> 3.0)
-    yum-mysql-community (0.1.17)
-      yum (>= 3.0)
-    yum-repoforge (0.5.3)
+    xfs (2.0.1)
+    yum (3.10.0)
+    yum-epel (0.7.0)
+      yum (>= 3.6.3)
+    yum-erlang_solutions (0.3.1)
       yum (~> 3.2)
       yum-epel (>= 0.0.0)
+    yum-mysql-community (0.2.0)
+      yum (>= 3.2)
 
 GIT
   remote: git@github.com:lagotto/capistrano-cookbook.git
   ref: master
-  sha: d2f3df1923384745067c2a5b66ec1b8e8fa1d4f2
+  sha: f42dae835506ff5e7ff6de3e8ff9410a92da744e
   specs:
-    capistrano (0.10.4)
+    capistrano (1.0.22)
+      apt (>= 0.0.0)
+      chef-solo-search (>= 0.0.0)
       consul (>= 0.0.0)
+      dotenv (~> 1.0.0)
       nodejs (>= 0.0.0)
+      rsyslog (>= 0.0.0)
       ruby (~> 0.7.0)
 
 GIT
   remote: git@github.com:lagotto/dotenv-cookbook.git
   ref: master
-  sha: 3818435f4506f80a45f5a924ef880a3b371e0798
+  sha: 3760e235c2cf7876119e6e2488c7c2b39319d4c4
   specs:
-    dotenv (0.2.2)
+    dotenv (1.0.2)
 
 GIT
   remote: git@github.com:lagotto/lagotto-cookbook.git
   ref: master
-  sha: d1d5dcf86de4bbf32e9044efb142f6f3a3f4450e
+  sha: 4ae5888e58965571b72a431b89968d95fc551f33
   specs:
-    lagotto (4.7.13)
+    lagotto (5.0.14)
       apt (>= 0.0.0)
-      capistrano (~> 0.10.0)
+      capistrano (~> 1.0.0)
       consul (>= 0.0.0)
-      couchdb (>= 0.0.0)
-      database (~> 2.3.1)
-      dotenv (~> 0.2.0)
+      dotenv (~> 1.0.0)
       memcached (>= 0.0.0)
-      mysql (>= 0.0.0)
-      mysql_rails (~> 0.3.0)
       nodejs (>= 0.0.0)
-      passenger_nginx (~> 0.5.0)
+      passenger_nginx (~> 1.0.0)
       postfix (>= 0.0.0)
-      redisio (>= 0.0.0)
+      rsyslog (>= 0.0.0)
       ruby (~> 0.7.0)
 
 GIT
@@ -134,9 +155,9 @@ GIT
 GIT
   remote: git@github.com:lagotto/mysql_rails-cookbook.git
   ref: master
-  sha: 25ddc5987bf5aa10cc3aacfe8482cacf8ac26a64
+  sha: 75746eaa26e00330b4cb5e894ebf3eae20cbddc4
   specs:
-    mysql_rails (0.3.31)
+    mysql_rails (0.3.33)
       database (~> 2.3.1)
       mysql (~> 5.6.1)
       ruby (~> 0.7.0)
@@ -144,19 +165,22 @@ GIT
 GIT
   remote: git@github.com:lagotto/passenger_nginx-cookbook.git
   ref: master
-  sha: 23ca6144a67a949ef98932f7cfd6561ec1045703
+  sha: f5f00174a878d5f9c1d92e5dae49e31768f66d5b
   specs:
-    passenger_nginx (0.5.4)
+    passenger_nginx (1.0.15)
       apt (>= 0.0.0)
+      hostnames (>= 0.0.0)
+      nodejs (>= 0.0.0)
       ruby (~> 0.7.0)
 
 GIT
   remote: git@github.com:lagotto/ruby-cookbook.git
   ref: master
-  sha: 0a52e4d402ce77cc31d9f50e6a82bb8eb472f9e6
+  sha: d40a6dc987080615a0c126101ec041efcaa78dc8
   specs:
-    ruby (0.7.0)
+    ruby (0.7.7)
       apt (>= 0.0.0)
+      build-essential (>= 0.0.0)
 
 DEPENDENCIES
   capistrano (>= 0)

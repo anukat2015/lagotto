@@ -218,7 +218,8 @@ Devise.setup do |config|
                           login_url: "#{ENV['CAS_PREFIX']}/login",
                           logout_url: "#{ENV['CAS_PREFIX']}/logout",
                           service_validate_url: "#{ENV['CAS_PREFIX']}/serviceValidate",
-                          ssl: true,
+                          disable_ssl_verification: true,
+                          #ssl: true,
                           fetch_raw_info: lambda { |strategy, options, ticket, user_info|
                             User.fetch_raw_info(user_info.fetch('user'))
                           }
